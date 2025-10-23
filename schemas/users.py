@@ -1,0 +1,32 @@
+from pydantic import BaseModel, EmailStr, Field, model_validator
+
+from utils.security import get_password_hash
+
+
+class LoginSchema(BaseModel):
+    login: EmailStr | str
+    password: str = Field(...)
+
+
+class RegisterSchema(BaseModel):
+    username: str = Field(...)
+    password: str = Field(...)
+    confirm_password: str = Field(...)
+    email: EmailStr = Field(...)
+
+    @model_validator(mode="after")
+    def check_passwords_match(self):
+        if self.password != self.confirm_password:
+            raise ValueError("Passwords do not match")
+
+        hashed = get_password_hash(self.password)
+        self.password = hashed
+        self.confirm_password = hashed
+        return self
+
+
+class UserOutSchema(BaseModel):
+    username: str = Field(...)
+    email: EmailStr = Field(...)
+    first_name: str | None = Field(...)
+    last_name: str | None = Field(...)
