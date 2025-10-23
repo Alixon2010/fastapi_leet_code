@@ -38,4 +38,3 @@ async def check_unique_constraint_to_problem(data: ProblemCreateSchema):
         raise HTTPException(status_code=400, detail="Problem already exists")
 
     return data
-
