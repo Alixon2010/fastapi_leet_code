@@ -30,3 +30,8 @@ class UserOutSchema(BaseModel):
     email: EmailStr = Field(...)
     first_name: str | None = Field(...)
     last_name: str | None = Field(...)
+
+
+class UserUpdateSchema(BaseModel):
+    first_name: str | None = Field(...)
+    last_name: str | None = Field(...)

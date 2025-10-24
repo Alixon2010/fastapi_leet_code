@@ -71,7 +71,8 @@ def get_password_hash(password):
 async def get_current_user(
     token: Annotated[str, Depends(http_bearer)],
 ) -> User:
-    token = token.credentials  # noqa
+    print("Hello")
+    token = token.credentials # noqa
     try:
         encoded_jwt = jwt.decode(
             token, settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM]

@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Response
 from database import User
 from schemas import RegisterSchema
 from schemas.token import TokenSchema
-from schemas.users import LoginSchema, UserOutSchema
+from schemas.users import LoginSchema, UserOutSchema, UserUpdateSchema
 from utils.async_validators import (
     check_username_and_password,
     validate_email_and_username,
@@ -20,6 +20,12 @@ user_router = APIRouter()
 @user_router.get("/me", response_model=UserOutSchema)
 async def get_me(user: User = Depends(get_current_user)):
     return UserOutSchema.model_validate(user, from_attributes=True)
+
+
+@user_router.patch("/user_update", response_model=UserOutSchema)
+async def all_users(data: UserUpdateSchema, user: User = Depends(get_current_user)):
+    await user.update(user.id, **data.model_dump(exclude_none=True))
+    return user
 
 
 @user_router.post("/auth/register", tags=["auth"])
