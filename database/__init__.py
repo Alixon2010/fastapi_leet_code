@@ -1,3 +1,3 @@
-from database.users import User
-from database.problems import Problem, Tag, TagProblem
-from database.base_model import Base
+from .users import User
+from .problems import Problem, Topic, Submission, Language, Example
+from .base_model import Base, IDBaseModel, SlugBaseModel

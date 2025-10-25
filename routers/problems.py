@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends
 from starlette import status
 
-from database import Problem, Tag
-from schemas.problems import ProblemCreateSchema, TagCreateSchema
+from database import Problem, Topic
+from schemas.problems import ProblemCreateSchema, TopicCreateSchema
 from utils.async_validators import check_unique_constraint_to_problem
 from utils.functions import (
-    filter_by_tag,
+    filter_by_topic,
     order_by_difficulty_,
     paginator,
     search_by_name_or_description,
@@ -35,10 +35,10 @@ async def get_problems(
 
 
 @problem_router.get("/problems/{slug}")
-async def get_problems_by_tag(
-    slug, page_size: int = 10, page_number: int = 1, search: str = None
+async def get_problems_by_topic(
+    topic_id: int, page_size: int = 10, page_number: int = 1, search: str = None
 ):
-    problems = (await filter_by_tag(slug)).all()
+    problems = (await filter_by_topic(topic_id)).all()
     if search is not None:
         problems = await search_by_name_or_description(search)
 
@@ -57,13 +57,13 @@ async def create_problem(
     return {"message": "problem created", "data": problems}
 
 
-@problem_router.get("/tags")
-async def get_all_tags():
-    tags = await Tag.all()
-    return {"tags": tags}
+@problem_router.get("/topics")
+async def get_all_topics():
+    topics = await Topic.all()
+    return {"topics": topics}
 
 
-@problem_router.post("/tags", status_code=status.HTTP_201_CREATED)
-async def create_tags(data: TagCreateSchema):
-    await Tag.create(**data.model_dump(exclude_none=True, exclude_unset=True))
+@problem_router.post("/topics", status_code=status.HTTP_201_CREATED)
+async def create_topics(data: TopicCreateSchema):
+    await Topic.create(**data.model_dump(exclude_none=True, exclude_unset=True))
     return {"success": True}

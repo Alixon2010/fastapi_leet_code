@@ -23,7 +23,7 @@ async def get_me(user: User = Depends(get_current_user)):
 
 
 @user_router.patch("/user_update", response_model=UserOutSchema)
-async def all_users(data: UserUpdateSchema, user: User = Depends(get_current_user)):
+async def update_user(data: UserUpdateSchema, user: User = Depends(get_current_user)):
     await user.update(user.id, **data.model_dump(exclude_none=True))
     return user
 
@@ -44,12 +44,4 @@ async def login_user(
     access_token = create_access_token(data={"sub": data.login})
     refresh_token = create_refresh_token(data={"sub": data.login})
 
-    response.set_cookie(
-        key="refresh_token",
-        value=refresh_token,
-        httponly=True,
-        secure=True,
-        samesite="strict",
-    )
-
-    return TokenSchema(access_token=access_token)
+    return TokenSchema(access_token=access_token, refresh_token=refresh_token)

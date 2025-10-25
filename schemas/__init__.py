@@ -1,2 +1,2 @@
-from schemas.problems import TagCreateSchema
+from schemas.problems import TopicCreateSchema
 from schemas.users import RegisterSchema

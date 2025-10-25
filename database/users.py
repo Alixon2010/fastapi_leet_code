@@ -1,9 +1,14 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 from pydantic import EmailStr
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database.base_model import CreatedBaseModel, IDBaseModel
 
+if TYPE_CHECKING:
+    from database.problems import Submission
 
 class User(IDBaseModel, CreatedBaseModel):
     first_name: Mapped[str] = mapped_column(String(255), nullable=True)
@@ -11,6 +16,7 @@ class User(IDBaseModel, CreatedBaseModel):
     email: Mapped[EmailStr] = mapped_column(String(255), unique=True)
     username: Mapped[str] = mapped_column(String(255), unique=True)
     password: Mapped[str] = mapped_column(String(255))
+    submissions: Mapped[list['Submission']] = relationship('Submission', back_populates='user')
 
     @classmethod
     async def create(cls, **kwargs):

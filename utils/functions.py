@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from sqlalchemy import or_, select
 from starlette import status
 
-from database import Problem, Tag
+from database import Problem, Topic
 from database.base_model import db
 
 
@@ -34,8 +34,8 @@ async def search_by_name_or_description(search):
     return (await db.execute(query)).scalars().all()
 
 
-async def filter_by_tag(slug: str):
-    query = select(Problem).where(Problem.tags.any(Tag.slug == slug))
+async def filter_by_topic(id_: int):
+    query = select(Problem).where(Problem.topics.any(Topic.id == id_))
     result = await db.execute(query)
     return result.scalars()
 

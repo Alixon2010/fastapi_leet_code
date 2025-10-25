@@ -3,7 +3,7 @@ from enum import Enum
 from pydantic import BaseModel, Field
 
 
-class TagCreateSchema(BaseModel):
+class TopicCreateSchema(BaseModel):
     name: str = Field(...)
     key: str | None = None
 
